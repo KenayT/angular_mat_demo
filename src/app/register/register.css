@@ -158,3 +158,107 @@ button:active:not([disabled]) {
   position: relative;
   overflow: hidden;
 }
+
+/* --- Water Droplet & Theme Toggle Styles --- */
+
+.theme-wrapper {
+  position: relative;
+  min-height: 100vh;
+  /* Smooth transition for text color on the whole page */
+  transition: color 0.4s ease;
+}
+
+.toggle-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px 40px;
+  position: relative;
+  z-index: 10; /* Keeps it above the expanding droplet */
+}
+
+.droplet-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #1a1e29; /* Dark blue visual palette */
+  z-index: -1;
+  /* The Drop Magic: Starts as a 0px circle at the top right */
+  clip-path: circle(0% at 95% 5%);
+  transition: clip-path 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* When dark mode is active, the droplet expands to cover the screen */
+.dark-mode .droplet-bg {
+  clip-path: circle(150% at 95% 5%);
+}
+
+/* --- Dark Mode Form Container Colors --- */
+.dark-mode .form-container {
+  background-color: #242a38;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode h2 {
+  color: #b39ddb; /* Pastel art accent color */
+}
+
+.dark-mode .radio-label,
+.dark-mode .slider-label,
+.dark-mode .chips-label {
+  color: #e0e0e0;
+}
+
+.dark-mode .results-box {
+  background-color: #1a1e29;
+}
+
+.dark-mode .results-box p {
+  color: #e0e0e0;
+}
+
+/* Ensure the Material input text turns white in dark mode */
+.dark-mode ::ng-deep .mat-mdc-input-element {
+  color: #e0e0e0 !important;
+}
+
+/* --- Dark Mode Form Container Colors --- */
+.dark-mode .form-container {
+  background-color: #242a38; /* The dark blue container background */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Keep the main headers and outside labels light/pastel so they look good on dark blue */
+.dark-mode h2 {
+  color: #b39ddb; /* Pastel purple */
+}
+
+.dark-mode .radio-label,
+.dark-mode .slider-label,
+.dark-mode .chips-label,
+.dark-mode .results-box p {
+  color: #e0e0e0; /* Light gray/white */
+}
+
+.dark-mode .results-box {
+  background-color: #1a1e29; /* Dark background for results */
+}
+
+/* --- Material Design Overrides for Input Text --- */
+
+/* Force ONLY the typed input text to be black so it is readable against the light field background */
+.dark-mode ::ng-deep .mat-mdc-input-element {
+  color: #000000 !important;
+  caret-color: #000000 !important; /* The typing cursor */
+}
+
+/* Ensure the placeholder text is a readable dark gray */
+.dark-mode ::ng-deep ::placeholder {
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Let the floating labels (Username, Email, etc.) keep their default dark colors inside the light fill */
+.dark-mode ::ng-deep .mdc-floating-label {
+  color: rgba(0, 0, 0, 0.7) !important;
+}

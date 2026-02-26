@@ -1,23 +1,23 @@
-import { DatePipe, CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 // Existing Material Imports
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSliderModule } from '@angular/material/slider';
 
-// NEW Material Imports for your 3 chosen components
+// NEW Material Imports for chosen components & Dark Mode
 import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatRippleModule } from '@angular/material/core';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
-// --- 1. NEW: The Bottom Sheet Component ---
+// --- The Bottom Sheet Component ---
 @Component({
   selector: 'help-sheet',
   standalone: true,
@@ -26,7 +26,7 @@ import { MatRippleModule } from '@angular/material/core';
       <h3 style="margin-top: 0; color: #b39ddb;">Registration Help</h3>
       <p>Here is some assistance for your form:</p>
       <ul style="line-height: 1.8;">
-        <li>Ensure your password meets the 8-character security requirement.</li>
+        <li>Ensure your password meets the 8-character security requirement (starts with a letter, alphanumeric only).</li>
         <li>Select your development interests using the interactive chips.</li>
         <li>Double-check your web application details before submitting.</li>
       </ul>
@@ -35,7 +35,7 @@ import { MatRippleModule } from '@angular/material/core';
 })
 export class HelpSheet {}
 
-// --- 2. Main Register Component ---
+// --- Main Register Component ---
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -43,8 +43,7 @@ export class HelpSheet {}
     CommonModule, MatButtonModule, MatCheckboxModule, MatFormFieldModule,
     MatInputModule, MatSliderModule, MatRadioModule, MatDatepickerModule,
     MatNativeDateModule, ReactiveFormsModule, FormsModule,
-    // Add the new modules to the imports array
-    MatBottomSheetModule, MatChipsModule, MatRippleModule
+    MatBottomSheetModule, MatChipsModule, MatRippleModule, MatSlideToggleModule
   ],
   templateUrl: './register.html',
   styleUrls: ['./register.css']
@@ -61,27 +60,40 @@ export class Register {
   minSkillLevel = 1;
   maxSkillLevel = 10;
 
-  // NEW: Store selected chips
   selectedInterests: string[] = [];
+
+  // Maximum date allowed (Dec 31, 2006)
+  maxDate = new Date(2006, 11, 31);
+
+  // Track dark mode state
+  isDarkMode = false;
 
   formdata: FormGroup = new FormGroup({
     userName: new FormControl(''),
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+
+    // Password: Starts with a letter, followed by at least 7 alphanumeric characters
+    password: new FormControl('', [
+      Validators.required,
+      Validators.pattern(/^[a-zA-Z][a-zA-Z0-9]{7,}$/)
+    ]),
+
     gender: new FormControl('', [Validators.required]),
     birthDate: new FormControl(null, [Validators.required]),
     address: new FormControl(''),
     angularSkillLevel: new FormControl(5),
-    // NEW: Form control for the chips
     interests: new FormControl([])
   });
 
-  // NEW: Inject the MatBottomSheet service
   constructor(private bottomSheet: MatBottomSheet) {}
 
-  // NEW: Method to open the help sheet
   openHelpSheet() {
     this.bottomSheet.open(HelpSheet);
+  }
+
+  // Method to toggle the theme boolean
+  toggleTheme(event: any) {
+    this.isDarkMode = event.checked;
   }
 
   onClickSubmit(data: any) {
@@ -94,7 +106,6 @@ export class Register {
     this.angularSkillLevel = data.angularSkillLevel;
     this.birthDate = data.birthDate;
 
-    // NEW: Capture chip data
     this.selectedInterests = data.interests || [];
 
     if (this.formdata.valid) {

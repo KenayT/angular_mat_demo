@@ -1,87 +1,98 @@
-<div class="form-container">
-  <h2>Registration Form</h2>
-  <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)">
+<div class="theme-wrapper" [class.dark-mode]="isDarkMode">
 
-    <mat-form-field appearance="fill">
-      <mat-label>Username</mat-label>
-      <input matInput placeholder="Enter Text" formControlName="userName">
-    </mat-form-field>
+  <div class="droplet-bg"></div>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Email</mat-label>
-      <input matInput type="email" placeholder="Enter Email" formControlName="email">
-      @if (formdata.controls['email'].invalid && formdata.controls['email'].touched) {
-        <mat-error>Email is required and must be a valid email.</mat-error>
-      }
-    </mat-form-field>
+  <div class="toggle-container">
+    <mat-slide-toggle color="accent" (change)="toggleTheme($event)">
+      Dark Mode
+    </mat-slide-toggle>
+  </div>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Password</mat-label>
-      <input matInput type="password" placeholder="Enter password" formControlName="password">
-      @if (formdata.controls['password'].invalid && formdata.controls['password'].touched) {
-        <mat-error>Password is required and must be at least 8 characters long.</mat-error>
-      }
-    </mat-form-field>
+  <div class="form-container">
+    <h2>Registration Form</h2>
+    <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)">
 
-    <div class="radio-group">
-      <label class="radio-label">Gender</label>
-      <mat-radio-group formControlName="gender" class="gender-radio-group">
-        <mat-radio-button value="male">Male</mat-radio-button>
-        <mat-radio-button value="female">Female</mat-radio-button>
-        <mat-radio-button value="other">Other</mat-radio-button>
-      </mat-radio-group>
-    </div>
+      <mat-form-field appearance="fill">
+        <mat-label>Username</mat-label>
+        <input matInput placeholder="Enter Text" formControlName="userName">
+      </mat-form-field>
 
-    <div class="chips-group">
-      <label class="chips-label">Technical Interests</label>
-      <mat-chip-listbox aria-label="Select your interests" multiple formControlName="interests">
-        <mat-chip-option value="Aesthetic UI/UX">Aesthetic UI/UX</mat-chip-option>
-        <mat-chip-option value="RxJS & Angular">RxJS & Angular</mat-chip-option>
-        <mat-chip-option value="Cloud Computing">Cloud Computing</mat-chip-option>
-      </mat-chip-listbox>
-    </div>
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" placeholder="Enter Email" formControlName="email">
+        @if (formdata.controls['email'].invalid && formdata.controls['email'].touched) {
+          <mat-error>Email is required and must be a valid email.</mat-error>
+        }
+      </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Address</mat-label>
-      <input matInput placeholder="Enter Address" formControlName="address">
-    </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" placeholder="Enter password" formControlName="password">
+        @if (formdata.controls['password'].invalid && formdata.controls['password'].touched) {
+          <mat-error>Must be 8+ alphanumeric characters and start with a letter.</mat-error>
+        }
+      </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Birth Date</mat-label>
-      <input matInput [matDatepicker]="picker" placeholder="Select a date" formControlName="birthDate">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-      @if (formdata.get('birthDate')?.hasError('required')) {
-        <mat-error>Birth date is required.</mat-error>
-      }
-    </mat-form-field>
-
-    <div class="slider-group">
-      <label class="slider-label">Angular Skill Level: {{ formdata.get('angularSkillLevel')?.value }}</label>
-      <mat-slider [min]="minSkillLevel" [max]="maxSkillLevel" [step]="1" [discrete]="true">
-        <input matSliderThumb formControlName="angularSkillLevel">
-      </mat-slider>
-    </div>
-
-    <div class="button-group">
-      <button mat-button color="accent" type="button" (click)="openHelpSheet()">Need Help?</button>
-      <button mat-raised-button color="primary" type="submit" [disabled]="!formdata.valid">
-        Submit Form
-      </button>
-    </div>
-
-    @if (submitted) {
-      <div class="results-box" matRipple [matRippleColor]="'rgba(179, 157, 219, 0.4)'">
-        <p><strong>You have entered:</strong><br>
-        Username: {{ userName }} <br>
-        Email: {{ email }} <br>
-        Password: {{ password }} <br>
-        Gender: {{ gender }} <br>
-        Interests: {{ selectedInterests.join(', ') || 'None' }} <br>
-        Address: {{ address }} <br>
-        Birth Date: {{ birthDate | date:'shortDate' }} <br>
-        Angular Skill Level: {{ angularSkillLevel }}</p>
+      <div class="radio-group">
+        <label class="radio-label">Gender</label>
+        <mat-radio-group formControlName="gender" class="gender-radio-group">
+          <mat-radio-button value="male">Male</mat-radio-button>
+          <mat-radio-button value="female">Female</mat-radio-button>
+          <mat-radio-button value="other">Other</mat-radio-button>
+        </mat-radio-group>
       </div>
-    }
-  </form>
+
+      <div class="chips-group">
+        <label class="chips-label">Technical Interests</label>
+        <mat-chip-listbox aria-label="Select your interests" multiple formControlName="interests">
+          <mat-chip-option value="Aesthetic UI/UX">Aesthetic UI/UX</mat-chip-option>
+          <mat-chip-option value="RxJS & Angular">RxJS & Angular</mat-chip-option>
+          <mat-chip-option value="Cloud Computing">Cloud Computing</mat-chip-option>
+        </mat-chip-listbox>
+      </div>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Address</mat-label>
+        <input matInput placeholder="Enter Address" formControlName="address">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Birth Date</mat-label>
+        <input matInput [matDatepicker]="picker" placeholder="Select a date" formControlName="birthDate" [max]="maxDate">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        @if (formdata.get('birthDate')?.hasError('required')) {
+          <mat-error>Birth date is required.</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="slider-group">
+        <label class="slider-label">Angular Skill Level: {{ formdata.get('angularSkillLevel')?.value }}</label>
+        <mat-slider [min]="minSkillLevel" [max]="maxSkillLevel" [step]="1" [discrete]="true">
+          <input matSliderThumb formControlName="angularSkillLevel">
+        </mat-slider>
+      </div>
+
+      <div class="button-group">
+        <button mat-button color="accent" type="button" (click)="openHelpSheet()">Need Help?</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!formdata.valid">
+          Submit Form
+        </button>
+      </div>
+
+      @if (submitted) {
+        <div class="results-box" matRipple [matRippleColor]="'rgba(179, 157, 219, 0.4)'">
+          <p><strong>You have entered:</strong><br>
+          Username: {{ userName }} <br>
+          Email: {{ email }} <br>
+          Password: {{ password }} <br>
+          Gender: {{ gender }} <br>
+          Interests: {{ selectedInterests.join(', ') || 'None' }} <br>
+          Address: {{ address }} <br>
+          Birth Date: {{ birthDate | date:'shortDate' }} <br>
+          Angular Skill Level: {{ angularSkillLevel }}</p>
+        </div>
+      }
+    </form>
+  </div>
 </div>
